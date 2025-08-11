@@ -1304,7 +1304,31 @@ These alternatives remain as future enhancement options while keeping the initia
 - Improve detection algorithms
 - Add manual region selection tools
 - UI/UX refinements
-- unit-testing
+- Unit testing with TDD validation
+
+## Testing Strategy - TDD Approach
+
+### Unit Testing Focus
+**Principle**: Use Test-Driven Development (TDD) to ensure functionality without complex end-to-end testing.
+
+**Core Testing Areas**:
+1. **WindowDetectionService**: Unit tests for edge detection, threshold application, rectangle finding
+2. **WindowModeManager**: Unit tests for state transitions, error handling, cycling coordination
+3. **Window Selection Logic**: Unit tests for filtering, categorization, selection validation
+4. **Cycling Path Management**: Unit tests for cycle counting, path mapping, duplicate detection
+5. **Integration Points**: Unit tests for RustDesk method calls (mocked)
+
+**TDD Process for Each Component**:
+1. Write failing unit tests first (Red)
+2. Implement minimal code to pass tests (Green) 
+3. Refactor and optimize while maintaining tests (Refactor)
+4. Repeat for each function/method
+
+**Testing Framework**: Use Flutter's built-in `flutter_test` package
+
+**Mock Strategy**: Mock external dependencies (RustDesk's `gFFI`, `InputModel`, `ImageModel`)
+
+**No E2E Testing**: Focus purely on unit-level validation of individual functions and components
 
 ## Risk Mitigation
 
@@ -1468,9 +1492,17 @@ Answer: ignore this level of testing
 - Q: How do we create reproducible test scenarios for different window layouts and cycling behaviors?
 Answer: ignore this level of testing
 - Q: Should we implement automated testing for edge detection accuracy, or focus on manual testing with real desktop scenarios?
-Answer: I will conduct manual testing. Implement unit tests to validate functions, but avoid complex testing.
+**RESOLVED**: Use TDD approach with comprehensive unit tests for all functions. No end-to-end testing due to environment constraints. Focus on:
+  - Edge detection threshold validation
+  - Rectangle finding algorithm correctness
+  - State transition logic
+  - Error handling paths
 - Q: What test cases do we need for cycling path validation and error recovery?
-Answer: Ignore high level testing. Write unittests to validate functions, but nothign more.
+**RESOLVED**: Unit tests only covering:
+  - Cycle counting accuracy
+  - Path mapping correctness  
+  - Error state handling
+  - Mock validation of RustDesk integration points
 
 **14. Success Criteria & Metrics**
 - Q: What constitutes "successful" detection for MVP - 60% accurate window identification, or user satisfaction-based?
