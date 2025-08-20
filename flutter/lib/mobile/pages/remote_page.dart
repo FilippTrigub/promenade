@@ -23,6 +23,7 @@ import '../../models/model.dart';
 import '../../models/platform_model.dart';
 import '../../utils/image.dart';
 import '../widgets/dialog.dart';
+import '../widgets/window_detection_mixin.dart';
 
 final initText = '1' * 1024;
 
@@ -57,7 +58,7 @@ class RemotePage extends StatefulWidget {
   State<RemotePage> createState() => _RemotePageState(id);
 }
 
-class _RemotePageState extends State<RemotePage> with WidgetsBindingObserver {
+class _RemotePageState extends State<RemotePage> with WidgetsBindingObserver, WindowDetectionMixin {
   Timer? _timer;
   bool _showBar = !isWebDesktop;
   bool _showGestureHelp = false;
@@ -123,6 +124,8 @@ class _RemotePageState extends State<RemotePage> with WidgetsBindingObserver {
           isKeyboardVisible: keyboardVisibilityController.isVisible);
     });
     WidgetsBinding.instance.addObserver(this);
+    // Initialize window detection for mobile window navigation feature
+    initWindowDetection();
   }
 
   @override
@@ -148,6 +151,8 @@ class _RemotePageState extends State<RemotePage> with WidgetsBindingObserver {
     }
     await keyboardSubscription.cancel();
     removeSharedStates(widget.id);
+    // Cleanup window detection resources
+    disposeWindowDetection();
     // `on_voice_call_closed` should be called when the connection is ended.
     // The inner logic of `on_voice_call_closed` will check if the voice call is active.
     // Only one client is considered here for now.
@@ -616,6 +621,10 @@ class _RemotePageState extends State<RemotePage> with WidgetsBindingObserver {
           ];
           if (showCursorPaint) {
             paints.add(CursorPaint(widget.id));
+          }
+          // Add window detection overlay on top of everything
+          if (shouldShowWindowOverlay) {
+            paints.add(buildWindowDetectionOverlay());
           }
           return paints;
         }()));

@@ -1,0 +1,29 @@
+name: window_detection_feature
+description: RustDesk Window Detection Feature Implementation
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.17.0 <4.0.0'
+  flutter: '>=3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  provider: ^6.0.5
+  image: ^4.0.17  # Same version as RustDesk
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  mockito: ^5.4.2
+  build_runner: ^2.4.6
+  flutter_lints: ^2.0.3
+
+flutter:
+  uses-material-design: true
+
+# Integration notes:
+# - Copy lib/ contents to RustDesk flutter/lib/
+# - Copy test/ contents to RustDesk flutter/test/
+# - Add dependencies to RustDesk's pubspec.yaml if not already present
+# - provider and image packages are likely already included in RustDesk
